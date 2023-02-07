@@ -1,21 +1,19 @@
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 
-# [MAINTENANCE] Update with the latest release link
-URL = 'https://docs.vmware.com/en/VMware-vSphere/7.0/rn/vsphere-esxi-70u3j-release-notes.html'
+URL = 'https://www.virten.net/vmware/esxi-release-build-number-history/'
 
-# [MAINTENANCE] Update with previous version name (list on website doesn't include the latest version)
-previous_version_recorded = "VMware ESXi 7.0, ESXi 7.0 Update 3i Release Notes"
+# Update with latest release
+installed_version = "ESXi 7.0 Update 3j"
 
 req = Request(URL, headers={'User-Agent': 'Mozilla/5.0'})
 webpage = urlopen(req).read()
 soup = BeautifulSoup(webpage, "html.parser")
 
-previous_version_grabbed = soup.find_all("ul")[6].li.text
-
+latest_version = soup.find_all('table')[1].tbody.td.text
 
 if __name__ == '__main__':
-    if previous_version_grabbed != previous_version_recorded:
-        print("VMware new update available.")
+    if latest_version != installed_version:
+        print(f"New ESXi 7.0 update available.\nINFO: You're using '{installed_version}' while '{latest_version}' is available.")
     else:
-        print("VMware up to date.")
+        print(f"vSphere ESXi 7.0 up to date.\nINFO: You're using '{installed_version}'.")
